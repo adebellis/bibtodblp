@@ -24,7 +24,7 @@ def search_dblp_hits(title, author=None):
     url = (
         f"https://dblp.org/search/publ/api?q={requests.utils.quote(query)}&format=json"
     )
-    print(url)
+    #    print(url)
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -91,7 +91,7 @@ def select_dblp_entry(title, hits):
 
 def get_dblp_id_by_title_interactive(title, first_author=None):
     hits = search_dblp_hits(title, first_author)
-    print(hits)
+    #    print(hits)
     if not hits:
         hits = search_dblp_hits(title, None)
     if not hits:
@@ -109,7 +109,7 @@ def get_dblp_id_by_title_interactive(title, first_author=None):
 def get_dblp_bibtex(dblp_id, condensed=True):
     param = 0 if condensed else 1
     bib_url = f"https://dblp.org/rec/{dblp_id}.bib?view=bibtex&param={param}"
-    print(bib_url)
+    # print(bib_url)
     try:
         response = requests.get(bib_url)
         response.raise_for_status()
@@ -147,11 +147,11 @@ def update_bib_file(input_bib_path, output_bib_path, condensed=False):
         print(f"Processing: {title}...")
 
         dblp_id = get_dblp_id_by_title_interactive(title, first_author)
-        print(dblp_id)
+        # print(dblp_id)
         if dblp_id:
             bibtex_entry = get_dblp_bibtex(dblp_id, condensed=condensed)
-            print(condensed)
-            print(bibtex_entry)
+            #    print(condensed)
+            #    print(bibtex_entry)
             if bibtex_entry:
                 bibtex_entry = replace_key(bibtex_entry, original_key)
                 updated_entries.append(f"% DBLP ID: {dblp_id}\n{bibtex_entry}")
