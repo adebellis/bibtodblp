@@ -182,7 +182,7 @@ if __name__ == "__main__":
         "--output", required=False, help="Path to the output .bib file", default=None
     )
     parser.add_argument(
-        "--condensed", action="store_false", help="Use condensed DBLP citation style"
+        "--condensed", action="store_true", help="Use condensed DBLP citation style"
     )
     args = parser.parse_args()
     output_path = args.output

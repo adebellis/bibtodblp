@@ -24,14 +24,15 @@ pip install -r requirements.txt
 ## 🚀 Usage
 
 ``` bash
-python -m bibtodblp.main --input path/to/your.bib
+python main.py --input path/to/your.bib --condensed
 ```
 
-Options:
-Argument Description
---input	Path to the input .bib file (required)
---output	Output file path (default: inputname_dblp.bib)
---condensed	Use condensed citation style from DBLP (default: True)
+| Argument      | Description                                                                  |
+| ------------- | ---------------------------------------------------------------------------- |
+| `--input`     | **Required**: Path to the input `.bib` file                                  |
+| `--output`    | **Optional**: Path to the output `.bib` file (default: `inputname_dblp.bib`) |
+| `--condensed` | **Optional**: Use condensed citation style from DBLP (false by default)      |
+
 
 ## 🧪 Example
 
