@@ -31,7 +31,9 @@ python main.py --input path/to/your.bib --condensed
 | ------------- | ---------------------------------------------------------------------------- |
 | `--input`     | **Required**: Path to the input `.bib` file                                  |
 | `--output`    | **Optional**: Path to the output `.bib` file (default: `inputname_dblp.bib`) |
-| `--condensed` | **Optional**: Use condensed citation style from DBLP (false by default)      |
+| `--condensed` | **Optional** (default=False): Use condensed citation style from DBLP (false by default)      |
+| `--skip_arxiv`| **Optional** (default=False): Skip ArXiv citations (if any exist)                            |
+
 
 
 ## 🧪 Example

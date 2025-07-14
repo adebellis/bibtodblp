@@ -34,8 +34,13 @@ def search_dblp_hits(title, author=None):
         console.print(f"[red]Error during DBLP search for '{title}': {e}[/red]")
         return []
 
+def select_dblp_entry(title, hits, skip_arxiv=True):
 
-def select_dblp_entry(title, hits):
+    if skip_arxiv:
+        hits = [hit for hit in hits if "CoRR" != hit.get("info", {}).get("venue", "")]
+        if len(hits) == 1:
+            return hits[0].get("info", {}).get("url", "")
+
     if not hits:
         return None
 
@@ -88,8 +93,7 @@ def select_dblp_entry(title, hits):
             pass
         console.print("[red]Invalid input. Please enter a number.[/red]")
 
-
-def get_dblp_id_by_title_interactive(title, first_author=None):
+def get_dblp_id_by_title_interactive(title, first_author=None, skip_arxiv=True):
     hits = search_dblp_hits(title, first_author)
     #    print(hits)
     if not hits:
@@ -100,7 +104,7 @@ def get_dblp_id_by_title_interactive(title, first_author=None):
         return (
             hits[0].get("info", {}).get("url", "").replace("https://dblp.org/rec/", "")
         )
-    selected_url = select_dblp_entry(title, hits)
+    selected_url = select_dblp_entry(title, hits, skip_arxiv=skip_arxiv)
     if selected_url:
         return selected_url.replace("https://dblp.org/rec/", "")
     return None
@@ -123,7 +127,7 @@ def replace_key(bibtex_str, new_key):
     return re.sub(r"^@(\w+)\{[^,]+,", rf"@\1{{{new_key},", bibtex_str, count=1)
 
 
-def update_bib_file(input_bib_path, output_bib_path, condensed=False):
+def update_bib_file(input_bib_path, output_bib_path, condensed=False, skip_arxiv=True):
     with open(input_bib_path, "r") as bibtex_file:
         original_bib = bibtexparser.load(bibtex_file)
 
@@ -146,7 +150,7 @@ def update_bib_file(input_bib_path, output_bib_path, condensed=False):
 
         print(f"Processing: {title}...")
 
-        dblp_id = get_dblp_id_by_title_interactive(title, first_author)
+        dblp_id = get_dblp_id_by_title_interactive(title, first_author, skip_arxiv=skip_arxiv)
         # print(dblp_id)
         if dblp_id:
             bibtex_entry = get_dblp_bibtex(dblp_id, condensed=condensed)
@@ -184,10 +188,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "--condensed", action="store_true", help="Use condensed DBLP citation style"
     )
+    parser.add_argument(
+        "--skip_arxiv", action="store_true", help="Skip ArXiv entries"
+    )
+    
     args = parser.parse_args()
     output_path = args.output
     if not output_path:
         base, ext = os.path.splitext(args.input)
         output_path = f"{base}_dblp{ext}"
 
-    update_bib_file(args.input, output_path, condensed=args.condensed)
+    update_bib_file(args.input, output_path, condensed=args.condensed, skip_arxiv=args.skip_arxiv)
